@@ -17,6 +17,10 @@
         padding: 0px;
         margin: 0px;
     }
+    
+    #urls li.error {
+        color: red;
+    }
 
     #error {
         color: red;
@@ -40,12 +44,16 @@
         width: 80%;
     }
 </style>
-<h1>procrastine</h1>
+<h1>
+    procrastine
+    <a href="#" id="logout">logout</a>
+</h1>
 <div id="error"></div>
-<form id="add_url" method="POST" action="/add">
+<form id="add_url" method="POST" action="/add/">
     <input type="text" name="url">
     <input type="submit" value="Add">
 </form>
+<button id="reloadList">update list</button>
 <ul id="urls"></ul>
 <div id="api_key">
     <input type="text" name="api_key">
@@ -73,9 +81,9 @@
             var button = $("input[type=submit]").attr("disabled", true).val('Saving...');
             var url = $.trim($("input[name=url]").val());
             if (url.length) {
-                $.post(BASE_URL +"/add", {'url': url}, function(json){
+                $.post(BASE_URL +"/add/", {'url': url}, function(json){
                     if (json.status === 200) {
-                        addUrlToTheList(json.url);
+                        addUrlToTheList(json.link);
                         $("input[name=url]").val('');
                     } else {
                         showError(json.message);
@@ -91,14 +99,14 @@
         function addUrlToTheList(json) {
             var li  = "<li style='display:none;'>";
                 li += "<button type='button' class='remove' data-id='"+ json.id +"'>X</button>"; 
-                li += "<a href='"+ json.link + "' target='blank' data-id='"+ json.id +"'>";
-                li += json.link +"</a></li>";
+                li += "<a href='"+ json.url + "' target='blank' data-id='"+ json.id +"'>";
+                li += json.url +"</a></li>";
             $("#urls").prepend($(li).fadeIn());
         }
 
         // Update the list of urls
         function updateList() {
-            $.get(BASE_URL, null, function(json){
+            $.post(BASE_URL +"/list/", null, function(json){
                 var urls = $("#urls");
                 if (json.status === 200) {
                     if (json.urls.length) {
@@ -107,7 +115,7 @@
                             addUrlToTheList(json.urls[k]);
                         }
                     } else {
-                        urls.append("<li class='empty'>"+ json.message +"</li>");
+                        // urls.append("<li class='empty'>"+ json.message +"</li>");
                     }
                 } else {
                     urls.append("<li class='error'>"+ json.message +"</li>");
@@ -124,7 +132,10 @@
                     $("#api_key").fadeOut();
                     localStorage.setItem('api_key', api_key);
                     BASE_URL = BASE_BASEURL + api_key;
-                    updateList(api_key);
+                    updateList();
+                    $("#add_url").show();
+                    $("#reloadList").show();
+                    $("#logout").show();
                 } else {
                     showError('Invalid API Key');
                 }
@@ -133,6 +144,16 @@
             }
         }
         $("#api_key input[type=button]").click(setApiKey);
+
+        // Forget the Api Key and show the set api key form
+        function clearApiKey(e) {
+            localStorage.removeItem('api_key');
+            $("#add_url").hide();
+            $("#reloadList").hide();
+            $("#logout").hide();
+            $("#api_key").show();
+        }
+        $("#logout").click(clearApiKey);
 
         // Show confirmation in place
         var old_confirm_html;
@@ -160,7 +181,7 @@
         
         // remove a URL forever
         function removeUrl(id, li) {
-            $.post(BASE_URL +"/remove", {'id': id}, function(json){
+            $.post(BASE_URL +"/remove/", {'id': id}, function(json){
                 if (json.status === 200) {
                     li.fadeOut("normal", function(){ $(this).remove(); });
                 } else {
@@ -172,11 +193,17 @@
         // Initialize
         var api_key = localStorage.getItem('api_key');
         if (api_key === null) {
+            $("#add_url").hide();
+            $("#reloadList").hide();
+            $("#logout").hide();
             $("#api_key").show();
         } else {
             BASE_URL = BASE_BASEURL + api_key;
+            $("#api_key").hide();
             updateList();
         }
+
+        $("#reloadList").click(updateList);
 
         // Show a error message for X seconds 
         function showError(message, timeout) {
@@ -192,11 +219,11 @@
             });
         }
     });
-    </script>
-    <script>
+</script>
+<script>
     // Set the current URL to the input
     chrome.tabs.getCurrent(function(t){
-        document.querySelector("input[name=url]").value = t.url;
+        //document.querySelector("input[name=url]").value = t.url;
     });
 </script>
 

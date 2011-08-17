@@ -1,6 +1,7 @@
 {
   "name": "procrastine",
-  "version": "0.1",
+  "author": "Rodrigo Chacon <rochacon@gmail.com>",
+  "version": "0.2",
   "description": "Save a thought, URL, everything...",
   "browser_action": {
     "default_icon": "icon.png",
@@ -8,7 +9,7 @@
   },
   "permissions": [
     "tabs",
-    "https://a938bbc4.dotcloud.com/",
+    "https://procrastine.ep.io/",
     "https://ajax.googleapis.com/"
   ]
 }
