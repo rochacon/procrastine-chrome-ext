@@ -1,7 +1,7 @@
 <style>
     body {
         font-family: Monaco;
-        min-width: 375px;
+        min-width: 500px;
         max-width: 1000px;
         overflow-x: hidden;
     }
@@ -73,8 +73,11 @@
      *
      */
     $(function(){
+        // Globals
         var BASE_BASEURL = "https://procrastine.ep.io/";
         var BASE_URL = "";
+        var api_key = localStorage.getItem('api_key');
+        var reload_button = $("#reloadList");
 
         // Add a new URL
         function addUrl(){
@@ -105,8 +108,11 @@
         }
 
         // Update the list of urls
-        function updateList() {
+        function updateList(e) {
+            e.preventDefault();
+            var self = $(this).attr("disabled", true).html('loading...');
             $.post(BASE_URL +"/list/", null, function(json){
+                self.attr("disabled", false).html('update list');
                 var urls = $("#urls");
                 if (json.status === 200) {
                     if (json.urls.length) {
@@ -132,7 +138,7 @@
                     $("#api_key").fadeOut();
                     localStorage.setItem('api_key', api_key);
                     BASE_URL = BASE_BASEURL + api_key;
-                    updateList();
+                    reload_button.click();
                     $("#add_url").show();
                     $("#reloadList").show();
                     $("#logout").show();
@@ -190,8 +196,10 @@
             },"json");
         }
 
+        // Reload button event
+        reload_button.click(updateList);
+        
         // Initialize
-        var api_key = localStorage.getItem('api_key');
         if (api_key === null) {
             $("#add_url").hide();
             $("#reloadList").hide();
@@ -200,10 +208,8 @@
         } else {
             BASE_URL = BASE_BASEURL + api_key;
             $("#api_key").hide();
-            updateList();
+            reload_button.click();
         }
-
-        $("#reloadList").click(updateList);
 
         // Show a error message for X seconds 
         function showError(message, timeout) {
