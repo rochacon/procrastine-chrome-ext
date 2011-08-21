@@ -228,8 +228,8 @@
 </script>
 <script>
     // Set the current URL to the input
-    chrome.tabs.getCurrent(function(t){
-        //document.querySelector("input[name=url]").value = t.url;
+    chrome.tabs.getSelected(null, function(tab){
+        document.querySelector("input[name=url]").value = tab.url;
     });
 </script>
 
