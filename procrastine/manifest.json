@@ -1,8 +1,8 @@
 {
   "name": "procrastine",
   "author": "Rodrigo Chacon <rochacon@gmail.com>",
-  "version": "0.2",
-  "description": "Save a thought, URL, everything...",
+  "version": "0.3",
+  "description": "Save a thought, URL, anything...",
   "browser_action": {
     "default_icon": "icon19.png",
     "default_title": "procrastine",

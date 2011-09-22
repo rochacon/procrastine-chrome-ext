@@ -1,0 +1,45 @@
+body {
+    font-family: Monaco;
+    min-width: 500px;
+    max-width: 1000px;
+    overflow-x: hidden;
+}
+
+h1 {
+    font-size: 14pt;
+    margin: 0 auto;
+    text-align: center;
+}
+
+#things { 
+    list-style-type: none;
+    padding: 0px;
+    margin: 0px;
+}
+
+#things li.error {
+    color: red;
+}
+
+#error {
+    color: red;
+    padding: 3px;
+    display: none;
+}
+
+#api_key {
+    display: none;
+}
+
+#api_key input[type=text] {
+    width: 74%;
+}
+
+#add_thing {
+    text-align: center;
+}
+
+#add_thing input[type=text] {
+    width: 80%;
+}
+
