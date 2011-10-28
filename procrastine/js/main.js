@@ -3,8 +3,8 @@
  */
 $(function(){
     // Globals
-    // var BASE_BASEURL = "https://procrastine.ep.io/";
-    var BASE_BASEURL = "http://localhost:8000/";
+    var BASE_BASEURL = "https://procrastine.ep.io/";
+    // var BASE_BASEURL = "http://localhost:8000/";
     var BASE_URL = "";
     var api_key = localStorage.getItem('api_key');
     var reload_button = $("#reloadList");
