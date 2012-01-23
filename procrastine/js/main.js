@@ -3,7 +3,7 @@
  */
 $(function(){
     // Globals
-    var BASE_BASEURL = "https://procrastine.ep.io/";
+    var BASE_BASEURL = "http://procrastine.herokuapp.com/";
     // var BASE_BASEURL = "http://localhost:8000/";
     var BASE_URL = "";
     var api_key = localStorage.getItem('api_key');
@@ -22,18 +22,18 @@ $(function(){
                     showError(json.message);
                 }
                 button.attr("disabled", false).val('Add');
-            },"json"); 
+            },"json");
         }
         return false;
     }
     $("#add_thing").live('submit', addThing);
 
-    // Add a thing list item 
+    // Add a thing list item
     function addThingToTheList(json) {
         var li  = "<li style='display:none;'>";
-            li += "<button type='button' class='remove' data-id='"+ json.id +"'>X</button>"; 
-            if (json.type !== 'text') { 
-                li += "<a href='#"+ json.url + "' target='blank' data-id='"+ json.id +"'>";
+            li += "<button type='button' class='remove' data-id='"+ json.id +"'>X</button>";
+            if (json.type !== 'text') {
+                li += "<a href='"+ json.url + "' target='_blank' data-id='"+ json.id +"'>";
             }
             li += json.content;
             if (json.type !== 'text') {
@@ -117,10 +117,10 @@ $(function(){
             li.html(old_confirm_html);
         },function(){
             removeThing(button.data('id'), li);
-        }); 
-        
+        });
+
     });
-    
+
     // remove a Thing forever
     function removeThing(id, li) {
         $.post(BASE_URL +"/remove/", {'id': id}, function(json){
@@ -134,7 +134,7 @@ $(function(){
 
     // Reload button event
     reload_button.click(updateList);
-    
+
     // Initialize
     if (api_key === null) {
         $("#add_thing").hide();
@@ -147,7 +147,7 @@ $(function(){
         reload_button.click();
     }
 
-    // Show a error message for X seconds 
+    // Show a error message for X seconds
     function showError(message, timeout) {
         if (timeout === null || timeout === undefined) {
             timeout = 5000;

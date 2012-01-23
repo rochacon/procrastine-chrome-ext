@@ -15,7 +15,7 @@
   },
   "permissions": [
     "tabs",
-    "https://procrastine.ep.io/",
+    "http://procrastine.herokuapp.com/",
     "https://ajax.googleapis.com/"
   ]
 }
